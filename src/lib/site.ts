@@ -14,7 +14,7 @@ export const SITE = {
   intro: '这里放一些物质，以及它们留下的痕迹。照片、短文，和偶尔的笔记。',
   author: '万千重复昵称',
   email: 'shuieryigoko@gmail.com',
-  url: '',
+  url: 'https://portfolio-749.pages.dev',
   locale: 'zh-CN',
   startYear: 2026,
   social: [] as SocialLink[],
