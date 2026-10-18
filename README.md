@@ -2,6 +2,10 @@
 
 一个杂志编辑风格的个人作品集：文字 + 图片组成一篇作品，公开链接直接访问，只有你能在网页后台发布。
 
+![首页预览](docs/preview-home.jpg)
+
+[作品页预览](docs/preview-work.jpg)
+
 - 站点框架：Astro（纯静态）
 - 内容后台：Pages CMS（浏览器里填表、拖图上传）
 - 代码与内容仓库：GitHub
@@ -41,7 +45,22 @@ npm run build    # 生成 dist/
 
 ## 第一次上线
 
-### 1. 代码已经推到 GitHub
+### 0. 首次推送（只需要一次）
+
+本地已经提交好了，但 GitHub 需要你本人登录授权一次。打开 PowerShell，执行：
+
+```powershell
+cd E:\Sample_reels
+git push -u origin main
+```
+
+- 如果弹出 GitHub 登录窗口：用 `shuieryigoko-del` 登录并授权。
+- 如果没有弹窗，或者提示输入密码：去 GitHub 创建一个 Fine-grained token（Settings → Developer settings → Personal access tokens → Fine-grained tokens），仓库只选 `portfolio`，权限给 `Contents: Read and write`；在 `Password` 提示处粘贴 token。
+- 不要把 token 发给任何人，也不要写进代码。
+
+推送成功后，刷新 `https://github.com/shuieryigoko-del/portfolio` 能看到文件。
+
+### 1. 确认代码已在 GitHub
 
 仓库：`https://github.com/shuieryigoko-del/portfolio`
 
