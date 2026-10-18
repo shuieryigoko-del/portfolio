@@ -45,21 +45,6 @@ npm run build    # 生成 dist/
 
 ## 第一次上线
 
-### 0. 首次推送（只需要一次）
-
-本地已经提交好了，但 GitHub 需要你本人登录授权一次。打开 PowerShell，执行：
-
-```powershell
-cd E:\Sample_reels
-git push -u origin main
-```
-
-- 如果弹出 GitHub 登录窗口：用 `shuieryigoko-del` 登录并授权。
-- 如果没有弹窗，或者提示输入密码：去 GitHub 创建一个 Fine-grained token（Settings → Developer settings → Personal access tokens → Fine-grained tokens），仓库只选 `portfolio`，权限给 `Contents: Read and write`；在 `Password` 提示处粘贴 token。
-- 不要把 token 发给任何人，也不要写进代码。
-
-推送成功后，刷新 `https://github.com/shuieryigoko-del/portfolio` 能看到文件。
-
 ### 1. 确认代码已在 GitHub
 
 仓库：`https://github.com/shuieryigoko-del/portfolio`
