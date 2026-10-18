@@ -1,0 +1,51 @@
+---
+import { getEntry, render } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { SITE } from '../lib/site';
+
+const about = await getEntry('pages', 'about');
+
+if (!about) {
+  throw new Error('缺少 src/content/pages/about.md，无法生成关于页。');
+}
+
+const { Content } = await render(about);
+---
+<BaseLayout title={about.data.title} description={about.data.description}>
+  <div class="container">
+    <section class="about-page">
+      <header class="about-header">
+        <p class="kicker">About</p>
+        <h1>{about.data.title}</h1>
+        <p class="about-lede">{about.data.description}</p>
+      </header>
+
+      <div class="about-grid">
+        <aside class="about-meta" aria-label="联系方式与制作信息">
+          <div class="meta-block">
+            <p class="meta-label">Contact</p>
+            <a href={`mailto:${SITE.email}`}>{SITE.email}</a>
+          </div>
+
+          {SITE.social.length > 0 && (
+            <div class="meta-block">
+              <p class="meta-label">Elsewhere</p>
+              {SITE.social.map((item) => (
+                <p><a href={item.href} rel="me noopener" target="_blank">{item.label}</a></p>
+              ))}
+            </div>
+          )}
+
+          <div class="meta-block">
+            <p class="meta-label">Colophon</p>
+            <p>Astro 构建，Pages CMS 编辑，GitHub 托管。</p>
+          </div>
+        </aside>
+
+        <div class="prose about-prose">
+          <Content />
+        </div>
+      </div>
+    </section>
+  </div>
+</BaseLayout>

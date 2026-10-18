@@ -1,0 +1,12 @@
+---
+import { SITE } from '../lib/site';
+
+const year = new Date().getFullYear();
+---
+<footer class="site-footer">
+  <div class="container site-footer-inner">
+    <p>© {year} {SITE.title}</p>
+    <p>{SITE.tagline}，持续整理中。</p>
+    <a href={`mailto:${SITE.email}`}>{SITE.email}</a>
+  </div>
+</footer>

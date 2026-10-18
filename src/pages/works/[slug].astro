@@ -1,0 +1,82 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import { getCollection, render } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { SITE } from '../../lib/site';
+import { adjacentWorks, formatDate, readingTime, workPath } from '../../lib/works';
+
+export async function getStaticPaths() {
+  const works = await getCollection('works', ({ data }) => !data.draft);
+  return works.map((work) => ({
+    params: { slug: work.data.slug },
+    props: { work },
+  }));
+}
+
+interface Props {
+  work: CollectionEntry<'works'>;
+}
+
+const { work } = Astro.props;
+const { Content } = await render(work);
+const published = await getCollection('works', ({ data }) => !data.draft);
+const { prev, next } = adjacentWorks(published, work.data.slug);
+const { title, summary, date, cover, coverAlt, tags } = work.data;
+const minutes = readingTime(work.body);
+const isoDate = date.toISOString().slice(0, 10);
+---
+<BaseLayout title={title} description={summary} image={cover} type="article">
+  <div class="container">
+    <article class="work-page">
+      <header class="work-header">
+        <a class="back-link" href="/">← 作品索引</a>
+        {tags.length > 0 && <p class="kicker">{tags.join(' / ')}</p>}
+        <h1>{title}</h1>
+        <p class="work-lede">{summary}</p>
+        <div class="work-meta">
+          <time datetime={isoDate}>{formatDate(date)}</time>
+          <span>{minutes} 分钟阅读</span>
+          <span>{SITE.author}</span>
+        </div>
+      </header>
+
+      {cover && (
+        <figure class="hero">
+          <img src={cover} alt={coverAlt || title} data-zoom />
+          {coverAlt && <figcaption>{coverAlt}</figcaption>}
+        </figure>
+      )}
+
+      <div class="prose">
+        <Content />
+      </div>
+
+      <footer class="work-footer">
+        <button class="copy-button" type="button" data-copy-link>复制链接</button>
+        <nav class="pager" aria-label="作品翻页">
+          {prev ? <a href={workPath(prev.data.slug)}>← {prev.data.title}</a> : <span></span>}
+          {next ? <a href={workPath(next.data.slug)}>{next.data.title} →</a> : <span></span>}
+        </nav>
+      </footer>
+    </article>
+  </div>
+
+  <script>
+    const button = document.querySelector<HTMLButtonElement>('[data-copy-link]');
+
+    if (button) {
+      button.addEventListener('click', async () => {
+        const original = button.textContent;
+        try {
+          await navigator.clipboard.writeText(window.location.href);
+          button.textContent = '已复制';
+        } catch {
+          button.textContent = '请手动复制地址栏';
+        }
+        window.setTimeout(() => {
+          button.textContent = original;
+        }, 2000);
+      });
+    }
+  </script>
+</BaseLayout>

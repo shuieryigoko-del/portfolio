@@ -1,0 +1,40 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import WorkCard from '../components/WorkCard.astro';
+import { SITE } from '../lib/site';
+import { sortWorks } from '../lib/works';
+
+const works = sortWorks(await getCollection('works', ({ data }) => !data.draft));
+const entryCount = String(works.length).padStart(2, '0');
+const currentYear = new Date().getFullYear();
+---
+<BaseLayout>
+  <div class="container">
+    <section class="masthead">
+      <div class="masthead-meta">
+        <span>Portfolio</span>
+        <span>{SITE.startYear}—{currentYear}</span>
+        <span>{entryCount} Entries</span>
+      </div>
+      <h1>{SITE.title}</h1>
+      <p class="tagline">{SITE.tagline}</p>
+      <p class="intro">{SITE.intro}</p>
+    </section>
+
+    <section class="works" aria-labelledby="works-heading">
+      <div class="section-head">
+        <h2 id="works-heading">作品索引</h2>
+        <span>按时间倒序</span>
+      </div>
+
+      {works.length > 0 ? (
+        <ol class="work-list">
+          {works.map((work, index) => <WorkCard work={work} index={index} />)}
+        </ol>
+      ) : (
+        <p class="empty">还没有作品。登录 Pages CMS，发布第一篇。</p>
+      )}
+    </section>
+  </div>
+</BaseLayout>

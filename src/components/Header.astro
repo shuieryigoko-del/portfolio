@@ -1,0 +1,16 @@
+---
+import { SITE } from '../lib/site';
+
+const path = Astro.url.pathname;
+const onAbout = path === '/about/' || path === '/about';
+---
+<header class="site-header">
+  <div class="container site-header-inner">
+    <a class="wordmark" href="/">{SITE.title}</a>
+    <nav class="site-nav" aria-label="主导航">
+      <a href="/" aria-current={path === '/' ? 'page' : undefined}>作品</a>
+      <a href="/about/" aria-current={onAbout ? 'page' : undefined}>关于</a>
+      <a href={`mailto:${SITE.email}`}>写信</a>
+    </nav>
+  </div>
+</header>

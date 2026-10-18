@@ -1,0 +1,36 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import { formatIndexDate, workPath } from '../lib/works';
+
+interface Props {
+  work: CollectionEntry<'works'>;
+  index: number;
+}
+
+const { work, index } = Astro.props;
+const { title, slug, date, summary, cover, coverAlt, tags } = work.data;
+---
+<li class="work-item">
+  <a class="work-link" href={workPath(slug)}>
+    <span class="work-index">{String(index + 1).padStart(2, '0')}</span>
+    <span class="work-figure">
+      {cover ? (
+        <img
+          src={cover}
+          alt={coverAlt || title}
+          loading={index === 0 ? 'eager' : 'lazy'}
+          fetchpriority={index === 0 ? 'high' : 'auto'}
+          decoding="async"
+        />
+      ) : (
+        <span class="work-figure-empty" aria-hidden="true">{title.slice(0, 1)}</span>
+      )}
+    </span>
+    <div class="work-body">
+      {tags.length > 0 && <span class="work-kicker">{tags.join(' / ')}</span>}
+      <h2 class="work-title">{title}</h2>
+      <span class="work-summary">{summary}</span>
+      <time class="work-date" datetime={date.toISOString().slice(0, 10)}>{formatIndexDate(date)}</time>
+    </div>
+  </a>
+</li>

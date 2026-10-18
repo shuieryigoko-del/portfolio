@@ -1,0 +1,87 @@
+media:
+  input: public/uploads
+  output: /uploads
+  rename: safe
+  categories: [image]
+
+content:
+  - name: works
+    label: 作品
+    type: collection
+    path: src/content/works
+    format: yaml-frontmatter
+    filename:
+      template: "{fields.slug}.md"
+      field: false
+    view:
+      primary: title
+      sort: date
+      order: desc
+    fields:
+      - name: title
+        label: 标题
+        type: string
+        required: true
+        options:
+          maxlength: 60
+      - name: slug
+        label: 网址后缀
+        type: string
+        required: true
+        description: 只能用英文小写、数字和连字符，例如 three-cups。发布后尽量不要改，否则旧链接会失效。
+        pattern:
+          regex: "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+          message: 只能使用英文小写、数字和连字符，例如 three-cups
+        options:
+          maxlength: 80
+      - name: date
+        label: 日期
+        type: date
+        required: true
+        description: 显示在列表和详情页，也用于排序。
+      - name: summary
+        label: 摘要
+        type: text
+        required: true
+        description: 一句话，显示在首页列表和分享卡片上，建议 20–60 字。
+        options:
+          maxlength: 120
+      - name: cover
+        label: 封面图
+        type: image
+        description: 建议竖图 4:5，长边 1600px 左右，会显示在首页和作品页顶部。
+      - name: coverAlt
+        label: 封面说明
+        type: string
+        description: 用一句话描述封面，方便无障碍阅读和搜索。
+      - name: tags
+        label: 标签
+        type: string
+        list: true
+        description: 按回车添加，例如「静物」「日常」。
+      - name: draft
+        label: 草稿
+        type: boolean
+        default: false
+        description: 打开后不会出现在公开网站，适合还没写完的作品。
+      - name: body
+        label: 正文
+        type: rich-text
+        description: 直接写，图片可以拖进来或点工具栏上传。
+
+  - name: about
+    label: 关于页
+    type: file
+    path: src/content/pages/about.md
+    format: yaml-frontmatter
+    fields:
+      - name: title
+        label: 页面标题
+        type: string
+        required: true
+      - name: description
+        label: 一句话介绍
+        type: text
+      - name: body
+        label: 正文
+        type: rich-text
