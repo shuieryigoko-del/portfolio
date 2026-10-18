@@ -43,38 +43,28 @@ npm run build    # 生成 dist/
 
 需要 Node.js 22。
 
-## 第一次上线
+## 部署与上线
 
-### 1. 确认代码已在 GitHub
+站点通过 **GitHub Actions** 自动部署到 **Cloudflare Pages**。
 
-仓库：`https://github.com/shuieryigoko-del/portfolio`
+- 仓库：[shuieryigoko-del/portfolio](https://github.com/shuieryigoko-del/portfolio)
+- 线上地址：`https://portfolio-749.pages.dev`
+- 工作流：`.github/workflows/deploy.yml`
+- 每次 push 到 `main`：安装依赖 → 跑测试 → 构建 → 用 Wrangler 上传 `dist/`
 
-### 2. 连接 Cloudflare Pages
+### 为什么不用 Cloudflare 后台的“连接 GitHub”
 
-1. 登录 [dash.cloudflare.com](https://dash.cloudflare.com)
-2. 左侧 **Workers & Pages** → **Create** → **Pages** → **Connect to Git**
-3. 选择 GitHub 账号，授权并选中 `portfolio` 仓库
-4. 构建设置：
-   - Framework preset：**Astro**
-   - Build command：`npm run build`
-   - Build output directory：`dist`
-   - Root directory：`/`
-5. 环境变量（Production 和 Preview 都加）：
-   - `NODE_VERSION` = `22`
-6. 点 **Save and Deploy**，等 1~2 分钟
-7. 记下分配到的地址，形如 `https://portfolio-xxxx.pages.dev`
+Cloudflare 的 GitHub App 授权回调在这个网络环境下会报 installation 错误，所以改用 **GitHub Actions + Wrangler 直接上传**，效果一样，而且更可控。
 
-### 3. 把正式域名写进站点
+### 一次性配置
 
-打开 `src/lib/site.ts`，把 `url` 改成刚拿到的地址：
+仓库已经配置好 Secret：
 
-```ts
-url: 'https://portfolio-xxxx.pages.dev',
-```
+- `CLOUDFLARE_API_TOKEN`：Cloudflare API Token，权限为 **Account → Cloudflare Pages → Edit**
 
-提交并推送后，Cloudflare 会自动重新构建。这一步用于 canonical 链接和微信/社交平台的分享卡片。
+如果要换 Token：Cloudflare → My Profile → API Tokens → 创建（只给 Pages Edit）→ GitHub 仓库 Settings → Secrets and variables → Actions → 更新 `CLOUDFLARE_API_TOKEN`。
 
-### 4. 打开 Pages CMS 后台
+### 打开 Pages CMS 后台
 
 1. 打开 [app.pagescms.org](https://app.pagescms.org)
 2. 点 **Sign in with GitHub**，用 `shuieryigoko-del` 登录
@@ -92,7 +82,7 @@ url: 'https://portfolio-xxxx.pages.dev',
 4. 点「封面图」上传封面；正文里直接写，图片拖进编辑器或点图片按钮上传
 5. 点 **Save**，等 1~2 分钟，刷新网站
 
-保存时 Pages CMS 会直接提交到 GitHub 的 `main` 分支，Cloudflare Pages 检测到更新后自动构建。不需要你手动发布。
+保存时 Pages CMS 会直接提交到 GitHub 的 `main` 分支，GitHub Actions 会自动构建并部署，1~2 分钟后线上更新。不需要你手动发布。
 
 ### 字段怎么填
 
