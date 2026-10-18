@@ -9,6 +9,7 @@ content:
     label: 作品
     type: collection
     path: src/content/works
+    subfolders: false
     format: yaml-frontmatter
     filename:
       template: "{fields.slug}.md"

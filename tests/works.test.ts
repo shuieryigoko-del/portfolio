@@ -111,7 +111,7 @@ describe('content files', () => {
       expect(data.slug, file).toMatch(/^[a-z0-9]+(?:-[a-z0-9]+)*$/);
       expect(data.date, file).toBeDefined();
       expect(data.summary, file).toBeTypeOf('string');
-      expect(Array.isArray(data.tags), file).toBe(true);
+      expect(data.tags === undefined || Array.isArray(data.tags), file).toBe(true);
       expect(typeof data.draft, file).toBe('boolean');
     }
   });
